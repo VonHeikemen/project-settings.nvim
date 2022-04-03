@@ -57,6 +57,63 @@ These are the defaults.
       List of functions that will be executed after the settings file is read.
 
 ==============================================================================
+Usage                                                 *project_settings-usage*
+
+First thing you'll want to do is setup your schema in your config file.
+The idea is that each `key` is associated to a lua function. For example.
+
+>
+    require('project-settings').setup({
+      allow = {
+        greeting = function(opts)
+          if opts.spanish == true then
+            print('Hola')
+          end
+
+          if opts.english == true then
+            print('Hello')
+          end
+        end,
+
+        another = function(opts)
+          print(vim.inspect(opts))
+        end
+      },
+    })
+<
+
+By default `project-settings` will look for a `.vimrc.json` in the current
+working directory. This file, for our particular case, can look like this.
+
+>
+    {
+      "greeting": {
+        "spanish": true,
+        "english": true
+      },
+      "another": {
+        "whatever": "I want"
+      }
+    }
+<
+
+What's going to happen here is that the function in `allow.greeting` will
+receive whatever value we have in the `greeting` property in the json file.
+Same thing will happen with `another`.
+
+Not a very useful example, I know. The point is, you can build the schema
+you like, with the features you want.
+
+Since it's really easy to allow arbitrary code execution with this plugin,
+by default no settings file will be executed until you "register" it. So,
+when you create a local settings file make sure to use the
+|:ProjectSettingsRegister| to register the file. You also need to register
+every change made in the file.
+
+If you fail to register a settings file, or any update, a message will
+appear telling you the reason why the file was not loaded.
+
+==============================================================================
 Commands                                           *project-settings-commands*
 
                                                         *:ProjectSettingsLoad*
