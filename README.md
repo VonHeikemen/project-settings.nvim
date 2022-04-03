@@ -116,23 +116,41 @@ You can pass this table to the `.setup()` or `.set_config()` functions to tweak 
 
 ## Lua api
 
-### `.setup({opts})`: Sets the initial configuration, reads and loads the settings file.
+### `.setup({opts})`
 
-### `.set_config({opts})`: Sets the initial configuration for the plugin. When this is used it is assumed you will load the settings file at a later time using the `.load()` function.
+Sets the initial configuration, reads and loads the settings file.
 
-### `.load()`: Load the settings file present in the current working directory.
+### `.set_config({opts})`
 
-### `.is_available()`: Returns a boolean that indicates whether or not there is a settings file available.
+Sets the initial configuration for the plugin. When this is used it is assumed you will load the settings file at a later time using the `.load()` function.
 
-### `.allow({opts})`: Updates the "schema" of functions that will be used to read the settings file.
+### `.load()`
 
-### `.register()`: "Register" a settings file.
+Load the settings file present in the current working directory.
 
-### `.edit()`: Open the settings file present in the current working directory.
+### `.is_available()`
 
-### `.check_status()`: Show message with the status of the settings file.
+Returns a boolean that indicates whether or not there is a settings file available.
 
-### `.utils.enable({callback})`: It wraps `{callback}` so that it is only executed if the value in the settings file is equal to `true`.
+### `.allow({opts})`
+
+Updates the "schema" of functions that will be used to read the settings file.
+
+### `.register()`
+
+"Register" a settings file.
+
+### `.edit()`
+
+Open the settings file present in the current working directory.
+
+### `.check_status()`
+
+Show message with the status of the settings file.
+
+### `.utils.enable({callback})`
+
+It wraps `{callback}` so that it is only executed if the value in the settings file is equal to `true`.
 
 ```lua
 local project_settings = require('project-settings')
@@ -147,7 +165,9 @@ project_settings.setup({
 })
 ```
 
-### `.utils.section({opts})`: Used to create a nested section of callbacks.
+### `.utils.section({opts})`
+
+Used to create a nested section of callbacks.
 
 ```lua
 local project_settings = require('project-settings')
