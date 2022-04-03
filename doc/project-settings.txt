@@ -1,0 +1,176 @@
+==============================================================================
+*project-settings*
+
+Define your "schema" using lua, write your settings in a JSON file.
+
+==============================================================================
+Introduction                                          *project-settings-intro*
+
+Manage your "local settings" using a json file in the current working
+directory of your project. This file will be parsed using functions
+you declare ahead of time in your neovim configuration.
+
+==============================================================================
+Configuration                                 *project-settings-configuration*
+
+You can provide a configuration table to the function
+|project-settings.setup()| or |project-settings.set_config()|.
+
+These are the defaults.
+
+>
+    {
+      settings = {
+        file_pattern = './.vimrc.json',
+        notify_changed = true,
+        notify_unregistered = true,
+        danger_zone = {
+          check_integrity = true
+        }
+      },
+      allow = {}
+    }
+<
+
+                                      *project-settings.settings.file_pattern*
+
+  settings.file_pattern: ~
+      Path of the settings file relative to the current working directory.
+
+                                    *project-settings.settings.notify_changed*
+
+  settings.notify_changed: ~
+      Show a message when the settings file has an unregistered change.
+
+                               *project-settings.settings.notify_unregistered*
+
+  settings.notify_unregistered: ~
+      Show a message if the settings file is not registered.
+
+                       *project-settings.settings.danger_zone.check_integrity*
+
+  settings.danger_zone.check_integrity: ~
+      Enable integrity check of the settings file.
+
+                                                      *project-settings.allow*
+  allow: ~
+      List of functions that will be executed after the settings file is read.
+
+==============================================================================
+Commands                                           *project-settings-commands*
+
+                                                        *:ProjectSettingsLoad*
+
+  ProjectSettingsLoad: ~
+      Execute the settings file present in the current working directory.
+
+                                                      *:ProjectSettingsStatus*
+
+  ProjectSettingsStatus: ~
+      Show message with the status of the settings file.
+
+                                                    *:ProjectSettingsRegister*
+
+  ProjectSettingsRegister: ~
+      Register a settings file. It also recent changes to a file.
+
+                                                        *:ProjectSettingsEdit*
+
+  ProjectSettingsEdit: ~
+      Open the settings file present in the current working directory.
+
+==============================================================================
+Lua api                                             *project-settings-lua-api*
+
+                                                    *project-settings.setup()*
+
+  .setup({opts}): ~
+      Sets the initial configuration, reads and loads the settings file.
+
+                                               *project-settings.set_config()*
+
+  .set_config({opts}): ~
+      Sets the initial configuration for the plugin. When this is used it is
+      assumed you will load the settings file at a later time using the
+      |project-settings.load()| function.
+
+                                                     *project-settings.load()*
+
+  .load(): ~
+      Load the settings file present in the current working directory.
+
+                                             *project-settings.is_available()*
+
+  .is_available(): ~
+      Returns a boolean that indicates whether or not there is a settings
+      file available.
+
+                                                    *project-settings.allow()*
+
+  .allow({opts}): ~
+      Updates the "schema" of functions that will be used to read
+      the settings file.
+
+                                                 *project-settings.register()*
+
+  .register(): ~
+      "Register" a settings file.
+
+                                                     *project-settings.edit()*
+
+  .edit(): ~
+      Open the settings file present in the current working directory.
+
+                                             *project-settings.check_status()*
+
+  .check_status(): ~
+      Show message with the status of the settings file.
+
+                                             *project-settings.utils.enable()*
+
+  .utils.enable({callback}): ~
+      It wraps `{callback}` so that it is only executed if the value in
+      the settings file is equal to `true`.
+
+>
+      local project_settings = require('project-settings')
+      local enable = project_settings.utils.enable
+
+      project_settings.setup({
+        allow = {
+          this = enable(function()
+            print('only when {"this": true}')
+          end)
+        }
+      })
+<
+
+                                            *project-settings.utils.section()*
+
+.utils.section({opts}): ~
+    Used to create a nested section of callbacks.
+
+>
+    local project_settings = require('project-settings')
+    local section = project_settings.utils.section
+
+    project_settings.setup({
+      allow = {
+        here = section({
+          this = function()
+            print('here.this')
+          end,
+          that = function()
+            print('here.that')
+          end
+        })
+      }
+    })
+<
+
+==============================================================================
+Support                                            *project-settings-donation*
+
+If you find this tool useful and want to support my efforts, consider
+leaving a tip in https://www.buymeacoffee.com/vonheikemen
+
