@@ -88,6 +88,7 @@ These are the defaults.
       check_integrity = true
     }
   },
+  parser = vim.json.decode,
   allow = {}
 }
 ```
@@ -101,6 +102,8 @@ You can pass this table to the `.setup()` or `.set_config()` functions to tweak 
 * `settings.notify_unregistered`: Show a message if the settings file is not registered.
 
 * `settings.danger_zone.check_integrity`: Enable integrity check of the settings file.
+
+* `parser`: Function that takes the content of the settings files and returns a lua table. This function will be used to read the settings file.
 
 * `allow`: List of functions that will be executed after the settings file is read.
 

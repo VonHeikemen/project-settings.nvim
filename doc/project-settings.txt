@@ -28,6 +28,7 @@ These are the defaults.
           check_integrity = true
         }
       },
+      parser = vim.json.decode,
       allow = {}
     }
 <
@@ -52,7 +53,14 @@ These are the defaults.
   settings.danger_zone.check_integrity: ~
       Enable integrity check of the settings file.
 
+                                                     *project-settings.parser*
+
+  parser: ~
+      Function that takes the content of the settings files and returns a
+      lua table. This function will be used to read the settings file.
+
                                                       *project-settings.allow*
+
   allow: ~
       List of functions that will be executed after the settings file is read.
 

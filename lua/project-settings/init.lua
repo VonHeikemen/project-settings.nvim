@@ -158,7 +158,7 @@ s.execute = function(filepath)
     return {loaded = false, file_state = file_state}
   end
 
-  local data = vim.json.decode(content)
+  local data = global_opts.parser(content)
 
   for name, fn in pairs(global_opts.allow) do
     if data[name] then

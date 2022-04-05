@@ -17,6 +17,7 @@ end
 M.defaults = function()
   return {
     allow = {},
+    parser = vim.json.decode,
     settings = {
       notify_unregistered = true,
       notify_changed = true,
