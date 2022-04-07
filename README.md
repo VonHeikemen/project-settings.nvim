@@ -52,6 +52,8 @@ require('project-settings').setup({
 })
 ```
 
+> If you interested in more useful examples check out the wiki: [Examples](https://github.com/VonHeikemen/project-settings.nvim/wiki/Examples).
+
 By default `project-settings` will look for a `.vimrc.json` in the current working directory. This file, for our particular case, can look like this.
 
 ```json
