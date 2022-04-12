@@ -20,7 +20,7 @@ M.setup = function(opts)
     local augroup = vim.api.nvim_create_augroup("ProjectSettingsConfig", { clear = true })
     vim.api.nvim_create_autocmd({"DirChanged"}, {
       pattern = "*",
-      command = "lua require('project-settings').load({{verbose = false}})",
+      command = "lua require('project-settings').load({verbose = false})",
       group = augroup
     })
   end
