@@ -24,6 +24,7 @@ These are the defaults.
         file_pattern = './.vimrc.json',
         notify_changed = true,
         notify_unregistered = true,
+        autoload_on_dir_changed = true,
         danger_zone = {
           check_integrity = true
         }
@@ -47,6 +48,11 @@ These are the defaults.
 
   settings.notify_unregistered: ~
       Show a message if the settings file is not registered.
+
+                            *project-settings.settings.autoload_on_dir_changed*
+
+  settings.autoload_on_dir_changed: ~
+      Automatically load the project settings on directory changed
 
                        *project-settings.settings.danger_zone.check_integrity*
 

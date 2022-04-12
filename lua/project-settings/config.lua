@@ -23,6 +23,7 @@ M.defaults = function()
       notify_changed = true,
       file_pattern = './.vimrc.json',
       file_register = vim.fn.stdpath('data') .. '/project-settings.info.json',
+      autoload_on_dir_changed = true,
       danger_zone = {
         check_integrity = true
       }

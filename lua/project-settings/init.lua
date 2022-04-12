@@ -15,6 +15,15 @@ M.setup = function(opts)
 
   config.setup(opts)
   M.load({verbose = false})
+
+  if config.get().settings.autoload_on_dir_changed == true then
+    local augroup = vim.api.nvim_create_augroup("ProjectSettingsConfig", { clear = true })
+    vim.api.nvim_create_autocmd({"DirChanged"}, {
+      pattern = "*",
+      command = "lua require('project-settings').load({{verbose = false}})",
+      group = augroup
+    })
+  end
 end
 
 M.load = function(opts)
@@ -41,6 +50,7 @@ M.register = function()
 
   -- User **needs** to review the file
   if vim.fn.expand('%:p') ~= current then
+    vim.notify("You need to open " .. current .. " and do ProjectSettingsRegister", vim.log.levels.INFO)
     return
   end
 
