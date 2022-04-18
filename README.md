@@ -86,6 +86,7 @@ These are the defaults.
     file_pattern = './.vimrc.json',
     notify_changed = true,
     notify_unregistered = true,
+    autoload_on_dir_changed = false,
     danger_zone = {
       check_integrity = true
     }
@@ -102,6 +103,8 @@ You can pass this table to the `.setup()` or `.set_config()` functions to tweak 
 * `settings.notify_changed`: Show a message when the settings file has an unregistered change.
 
 * `settings.notify_unregistered`: Show a message if the settings file is not registered.
+
+* `settings.autoload_on_dir_change`: Load new settings file automatically if current working directory changes.
 
 * `settings.danger_zone.check_integrity`: Enable integrity check of the settings file.
 
