@@ -86,7 +86,7 @@ These are the defaults.
     file_pattern = './.vimrc.json',
     notify_changed = true,
     notify_unregistered = true,
-    autoload_on_dir_changed = false,
+    autoload_on_dir_change = false,
     danger_zone = {
       check_integrity = true
     }
