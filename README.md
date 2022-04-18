@@ -104,7 +104,7 @@ You can pass this table to the `.setup()` or `.set_config()` functions to tweak 
 
 * `settings.notify_unregistered`: Show a message if the settings file is not registered.
 
-* `settings.autoload_on_dir_change`: Load new settings file automatically if current working directory changes.
+* `settings.autoload_on_dir_change`: Load new settings file automatically if current working directory changes. If equal to `true` it will only try to read a settings file once. If equal to the string `'always'` it will try to load a settings file even if it was loaded on a previous occasion.
 
 * `settings.danger_zone.check_integrity`: Enable integrity check of the settings file.
 
@@ -132,9 +132,14 @@ Sets the initial configuration, reads and loads the settings file.
 
 Sets the initial configuration for the plugin. When this is used it is assumed you will load the settings file at a later time using the `.load()` function.
 
-### `.load()`
+### `.load({opts})`
 
 Load the settings file present in the current working directory.
+
+`{opts}` can accept the following parameters:
+
+* `verbose`: Boolean, defaults to `false`. Show a message if it can't read the settings file.
+* `force`: Boolean, defaults to `false`. Load settings file even if it was read before.
 
 ### `.is_available()`
 

@@ -22,9 +22,10 @@ end
 M.load = function(opts)
   opts = opts or {}
   local cwd = vim.fn.getcwd()
+  local read_once = not opts.force
 
   -- don't read same file twice
-  if s.files_read[cwd] then return end
+  if read_once and s.files_read[cwd] then return end
 
   local path = config.get().settings.file_pattern
   if vim.fn.filereadable(path) == 1 then
@@ -208,18 +209,22 @@ s.check_integrity = function(filepath, content)
 end
 
 s.setup_autoload = function()
+  local read_file = config.get().settings.autoload_on_dir_change
+
   local create_autocmd = s.has_autocmd == false
-    and config.get().settings.autoload_on_dir_change
+    and read_file
     and vim.fn.has('nvim-0.7') == 1
 
   if create_autocmd == false then return end
+
+  local force = read_file == 'always'
 
   local augroup = vim.api.nvim_create_augroup(
     'project_settings_nvim_cmds',
     {clear = true}
   )
 
-  local load = function() M.load({verbose = false}) end
+  local load = function() M.load({verbose = false, force = force}) end
 
   vim.api.nvim_create_autocmd({'DirChanged'}, {
     pattern = '*',
