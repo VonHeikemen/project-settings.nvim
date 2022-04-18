@@ -1,5 +1,5 @@
 local M = {utils = {}}
-local s = {}
+local s = {files_read = {}, has_autocmd = false}
 local uv = vim.loop
 
 s.status = {loaded = false, file_state = 'unknown'}
@@ -14,26 +14,27 @@ M.setup = function(opts)
   end
 
   config.setup(opts)
-  M.load({verbose = false})
+  s.setup_autoload()
 
-  if config.get().settings.autoload_on_dir_changed == true then
-    local augroup = vim.api.nvim_create_augroup("ProjectSettingsConfig", { clear = true })
-    vim.api.nvim_create_autocmd({"DirChanged"}, {
-      pattern = "*",
-      command = "lua require('project-settings').load({verbose = false})",
-      group = augroup
-    })
-  end
+  M.load({verbose = false})
 end
 
 M.load = function(opts)
   opts = opts or {}
+  local cwd = vim.fn.getcwd()
+
+  -- don't read same file twice
+  if s.files_read[cwd] then return end
 
   local path = config.get().settings.file_pattern
   if vim.fn.filereadable(path) == 1 then
     s.status = s.execute(path)
   elseif opts.verbose == true then
     vim.notify('No settings file available', vim.log.levels.WARN)
+  end
+
+  if s.status.loaded then
+    s.files_read[cwd] = true
   end
 end
 
@@ -50,7 +51,8 @@ M.register = function()
 
   -- User **needs** to review the file
   if vim.fn.expand('%:p') ~= current then
-    vim.notify("You need to open " .. current .. " and do ProjectSettingsRegister", vim.log.levels.INFO)
+    local msg = 'You need to open the settings file to register it.\n\nPath to file:\n%s'
+    vim.notify(msg:format(current), vim.log.levels.INFO)
     return
   end
 
@@ -88,7 +90,10 @@ M.edit = function()
   vim.cmd('edit ' .. current)
 end
 
-M.set_config = config.setup
+M.set_config = function(args)
+  config.setup(args)
+  s.setup_autoload()
+end
 
 M.allow = function(opts)
   opts = opts or {}
@@ -200,6 +205,29 @@ s.check_integrity = function(filepath, content)
   else
     return 'mismatch'
   end
+end
+
+s.setup_autoload = function()
+  local create_autocmd = s.has_autocmd == false
+    and config.get().settings.autoload_on_dir_change
+    and vim.fn.has('nvim-0.7') == 1
+
+  if create_autocmd == false then return end
+
+  local augroup = vim.api.nvim_create_augroup(
+    'project_settings_nvim_cmds',
+    {clear = true}
+  )
+
+  local load = function() M.load({verbose = false}) end
+
+  vim.api.nvim_create_autocmd({'DirChanged'}, {
+    pattern = '*',
+    group = augroup,
+    callback = load,
+  })
+
+  s.has_autocmd = true
 end
 
 s.write_file = function(path, contents)
