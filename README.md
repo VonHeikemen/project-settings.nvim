@@ -4,7 +4,7 @@ Define your "schema" using lua, write your settings in a JSON file.
 
 ## Getting Started
 
-Make sure you have [Neovim v0.6.1](https://github.com/neovim/neovim/releases/tag/v0.6.1) or greater.
+Make sure you have [Neovim v0.7.0](https://github.com/neovim/neovim/releases/tag/v0.7.0) or greater.
 
 ### Installation
 
@@ -75,6 +75,19 @@ Not a very useful example, I know. The point is, you can build the schema you li
 Since it's really easy to allow arbitrary code execution with this plugin, by default no settings file will be executed until you "register" it. So, when you create a local settings file make sure to use the `ProjectSettingsRegister` to register the file. You also need to register every change made in the file.
 
 If you fail to register a settings file, or any update, a message will appear telling you the reason why the file was not loaded.
+
+You can register automatically a settings file with an autocommand. This requires neovim v0.7.
+
+```lua
+local project_cmds = vim.api.nvim_create_augroup('project_cmds', {clear = true})
+local autocmd = vim.api.nvim_create_autocmd
+
+autocmd('BufWritePost', {
+  pattern = '.vimrc.json',
+  group = project_cmds,
+  command = 'ProjectSettingsRegister'
+})
+```
 
 ## Configuration
 

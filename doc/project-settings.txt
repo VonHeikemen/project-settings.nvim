@@ -131,6 +131,19 @@ every change made in the file.
 If you fail to register a settings file, or any update, a message will
 appear telling you the reason why the file was not loaded.
 
+You can register automatically a settings file with an autocommand.
+
+>
+    local project_cmds = vim.api.nvim_create_augroup('project_cmds', {clear = true})
+    local autocmd = vim.api.nvim_create_autocmd
+
+    autocmd('BufWritePost', {
+      pattern = '.vimrc.json',
+      group = project_cmds,
+      command = 'ProjectSettingsRegister'
+    })
+<
+
 ==============================================================================
 Commands                                           *project-settings-commands*
 
