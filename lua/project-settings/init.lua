@@ -152,8 +152,12 @@ s.execute = function(filepath)
     file_state = s.check_integrity(filepath, content)
   end
 
+  local not_loaded = {loaded = false, file_state = file_state}
+
   if file_state == 'unregistered' then
-    if global_opts.settings.notify_unregistered == false then return end
+    if global_opts.settings.notify_unregistered == false then
+      return not_loaded
+    end
 
     local msg = "[project-settings] Trying read a settings file that is not registered:\n%s"
       .. "\n\nPlease review the file then register it using using the command"
@@ -161,9 +165,9 @@ s.execute = function(filepath)
 
     vim.fn.confirm(msg:format(filepath))
 
-    return {loaded = false, file_state = file_state}
+    return not_loaded
   elseif file_state == 'mismatch' then
-    if global_opts.settings.notify_changed == false then return end
+    if global_opts.settings.notify_changed == false then return not_loaded end
 
     local msg = '[project-settings] Settings file has change since last access.\n'
       .. 'Please review the file and update the register using the command `ProjectSettingsRegister`.\n\n'
@@ -171,7 +175,7 @@ s.execute = function(filepath)
 
     vim.fn.confirm(msg:format(filepath))
 
-    return {loaded = false, file_state = file_state}
+    return not_loaded
   end
 
   local data = global_opts.parser(content)
